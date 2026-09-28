@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MeteoAlarm area map</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <link rel="stylesheet" href="map.css">
+</head>
+<body>
+<div class="mp-app">
+  <aside class="mp-panel">
+    <header>
+      <h1>Choose warning areas</h1>
+      <p class="mp-muted">For the <a href="https://github.com/Millardiang/weewx-meteoalarm_warnings">weewx-meteoalarm_warnings</a> WeeWX extension.</p>
+    </header>
+
+    <div class="mp-modes" role="tablist" aria-label="Selection mode">
+      <button type="button" data-mode="pick" class="active" role="tab" aria-selected="true">Pick areas</button>
+      <button type="button" data-mode="draw" role="tab" aria-selected="false">Draw polygon</button>
+    </div>
+    <p class="mp-help" data-help="pick">Click areas on the map to add or remove them, or search by name or EMMA code.</p>
+    <p class="mp-help" data-help="draw" hidden>Click on the map to place corners. Click the first corner, double-click,
+      or press <em>Finish</em> to close it. Areas it touches are watched, and so are warnings drawn as outlines
+      that cross it.</p>
+
+    <div class="mp-row">
+      <input id="mp-search" type="search" list="mp-codes" placeholder="Search area or code, e.g. UK258" autocomplete="off">
+      <datalist id="mp-codes"></datalist>
+      <button type="button" id="mp-locate" title="Go to my location">Near me</button>
+    </div>
+    <div class="mp-row mp-draw-tools" hidden>
+      <button type="button" id="mp-finish" disabled>Finish</button>
+      <button type="button" id="mp-undo" disabled>Undo corner</button>
+      <button type="button" id="mp-clear-poly" disabled>Clear polygon</button>
+    </div>
+
+    <section>
+      <h2>Chosen areas <span id="mp-count"></span></h2>
+      <ul id="mp-selected" class="mp-chips"></ul>
+      <p id="mp-none" class="mp-muted">None yet.</p>
+      <details id="mp-poly-box" hidden>
+        <summary>Polygon touches <span id="mp-poly-count">0</span> areas</summary>
+        <ul id="mp-poly-list" class="mp-chips mp-poly"></ul>
+      </details>
+    </section>
+
+    <section>
+      <h2><label for="mp-level">Show warnings from</label></h2>
+      <select id="mp-level">
+        <option value="1">Green (all)</option>
+        <option value="2">Yellow and above</option>
+        <option value="3">Orange and above</option>
+        <option value="4">Red only</option>
+      </select>
+    </section>
+
+    <section class="mp-code-box">
+      <h2>Setup code</h2>
+      <p class="mp-muted">When the WeeWX installer asks for it, copy this code and paste it into the terminal.</p>
+      <pre id="mp-code"></pre>
+      <button type="button" id="mp-copy-code" class="mp-primary">Copy setup code</button>
+      <span id="mp-copy-code-msg" class="mp-muted" role="status" aria-live="polite"></span>
+    </section>
+
+    <details class="mp-manual">
+      <summary>Or edit weewx.conf yourself</summary>
+      <p class="mp-muted">Replace the <code>[Meteoalarm]</code> section with this, then restart WeeWX.</p>
+      <pre id="mp-output"></pre>
+      <button type="button" id="mp-copy">Copy settings</button>
+    </details>
+
+    <p class="mp-muted mp-small">Your station's position and current areas are in the part of this page's
+      address after the <code>#</code>. Browsers never send that part to the website, so they stay on your device.</p>
+    <p class="mp-muted mp-small">Swiss areas have no drawn outline but can still be chosen by search.
+      Area outlines from MeteoAlarm; UK outlines contain ONS and OSNI data &copy; Crown copyright,
+      Open Government Licence v3.0. Map &copy; OpenStreetMap contributors.</p>
+  </aside>
+  <div id="mp-map" aria-label="Map of MeteoAlarm areas"></div>
+</div>
+<div id="mp-hint" class="mp-hint" hidden>Zoom in to see the warning areas</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="map.js"></script>
+</body>
+</html>
