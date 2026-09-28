@@ -1,0 +1,39 @@
+## Small warnings box for other pages. Load it with meteoalarm-embed.js, which
+## fixes up the relative links, or include it from a page in this folder.
+<div class="ma-summary#if $meteoalarm.configured and not $meteoalarm.has_alerts# ma-ok#end if#">
+<style>
+.ma-summary { font: 15px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; border: 1px solid #d9dde3; border-radius: 10px; padding: 10px 12px; background: #fff; color: #1d2330; max-width: 640px; }
+.ma-summary.ma-ok { border-left: 8px solid #29d660; }
+.ma-summary .ma-s-title { display: flex; justify-content: space-between; gap: 8px; margin: 0 0 6px; font-weight: 600; }
+.ma-summary .ma-s-title a { color: inherit; }
+.ma-summary .ma-s-title span { font-weight: 400; color: #5d6675; font-size: .9em; }
+.ma-summary ul { list-style: none; margin: 0; padding: 0; }
+.ma-summary li { display: flex; align-items: center; gap: 8px; padding: 3px 0; }
+.ma-summary .ma-s-icons { display: flex; gap: 4px; flex: none; }
+.ma-summary .ma-s-icons a { display: block; width: 36px; height: 36px; border-radius: 6px; border: 1px solid rgba(0,0,0,.35); }
+.ma-summary .ma-s-icons img { width: 28px; height: 28px; margin: 3px; }
+@media (prefers-color-scheme: dark) {
+  .ma-summary { background: #1e232b; color: #e6e9ee; border-color: #343b46; }
+  .ma-summary .ma-s-title span { color: #a3acb9; }
+}
+</style>
+#if not $meteoalarm.configured
+  <p class="ma-s-title">Weather warnings are not set up yet.</p>
+#elif $meteoalarm.has_alerts
+  <p class="ma-s-title"><a href="index.html">Weather warnings</a> <span>$meteoalarm.count active &middot; $meteoalarm.updated</span></p>
+  <ul>
+#for $row in $meteoalarm.summary
+    <li>
+      <span class="ma-s-icons">
+#for $icon in $row.icons
+        <a href="index.html#$icon.anchor" style="background: $icon.color" title="$icon.level_name: $icon.title"><img src="icons/$icon.icon" alt="$icon.level_name $icon.title"></a>
+#end for
+      </span>
+      <span>$row.area#if $row.country#, $row.country#end if#</span>
+    </li>
+#end for
+  </ul>
+#else
+  <p class="ma-s-title"><a href="index.html">No weather warnings</a> <span>$meteoalarm.updated</span></p>
+#end if
+</div>

@@ -1,0 +1,110 @@
+## Meteoalarm details page. $meteoalarm comes from user.meteoalarm.MeteoalarmSearchList.
+## All text from $meteoalarm is already HTML-escaped.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Weather warnings - $station.location</title>
+  <link rel="stylesheet" href="meteoalarm.css">
+</head>
+<body>
+<main class="ma-page">
+  <div class="ma-top">
+    <h1>Weather warnings</h1>
+    <nav>
+      <a href="$Extras.home_url">$Extras.home_label</a>
+    </nav>
+  </div>
+#if $meteoalarm.configured
+  <p class="ma-meta">
+    For #for $i, $area in enumerate($meteoalarm.area_list)#${", " if $i else ""}$area.name <code>$area.code</code>#end for#
+#if $meteoalarm.polygon
+    #if $meteoalarm.area_list# and #end if#your drawn area
+#end if
+    &middot; showing $meteoalarm.min_level_name and above &middot; updated $meteoalarm.updated
+  </p>
+#end if
+
+#if not $meteoalarm.configured
+  <section class="ma-box">
+    <h2>No areas chosen yet</h2>
+    <p>On the WeeWX computer, run <code>bin/user/meteoalarm.py --setup</code> (with WeeWX's Python, in your
+       WeeWX folder). It gives you a link to the area map; pick your areas there and paste the code it shows.</p>
+  </section>
+#elif not $meteoalarm.has_alerts
+  <section class="ma-box ma-clear">
+    <strong>No weather warnings in force.</strong>
+#if $meteoalarm.max_level >= 1
+    <span class="ma-note">(There are warnings below the $meteoalarm.min_level_name level.)</span>
+#end if
+  </section>
+#else
+#for $a in $meteoalarm.alerts
+  <article class="ma-alert" id="$a.anchor">
+    <div class="ma-alert-head" style="--level: $a.color">
+      <img src="icons/$a.icon" alt="">
+      <div>
+      <h2>$a.title <small>&middot; $a.level_name ($a.severity)</small></h2>
+      <p class="ma-areas">
+#for $i, $area in enumerate($a.areas)
+        ${"; " if $i else ""}$area.desc#if $area.code != "polygon"# <code>$area.code</code>#end if#
+#end for
+      </p>
+      <p><strong>Valid</strong> $a.onset_text &ndash; $a.expires_text</p>
+      </div>
+    </div>
+    <div class="ma-tabs">
+#for $i, $lang in enumerate($a.languages)
+      <input type="radio" name="$a.anchor" id="$lang.id"#if $i == 0# checked#end if#><label for="$lang.id">$lang.name</label>
+#end for
+      <input type="radio" name="$a.anchor" id="${a.anchor}-info"><label for="${a.anchor}-info">About</label>
+      <div class="ma-panels">
+#for $lang in $a.languages
+        <div class="ma-panel" lang="$lang.code">
+#if $lang.headline
+          <h3>$lang.headline</h3>
+#end if
+#if $lang.description
+          <p>$lang.description</p>
+#end if
+#if $lang.instruction
+          <p><strong>$lang.instruction</strong></p>
+#end if
+        </div>
+#end for
+        <div class="ma-panel">
+          <dl>
+            <dt>Issued by</dt>
+            <dd>#if $a.origin_url#<a href="$a.origin_url" target="_blank" rel="noopener">$a.sender_name</a>#else#${a.sender_name or "n/a"}#end if#</dd>
+            <dt>Issued</dt><dd>$a.sent_text</dd>
+            <dt>Level</dt><dd>$a.level_name &ndash; $a.advice</dd>
+#if $a.web
+            <dt>More</dt><dd><a href="$a.web" target="_blank" rel="noopener">$a.web</a></dd>
+#end if
+          </dl>
+#for $area in $a.areas
+#if $area.note
+          <p class="ma-note">$area.desc: $area.note</p>
+#end if
+#end for
+        </div>
+      </div>
+    </div>
+  </article>
+#end for
+#end if
+
+  <footer class="ma-footer">
+    <p>Warning data courtesy of and &copy; EUMETNET-METEOalarm (<a href="https://www.meteoalarm.org/">www.meteoalarm.org</a>)
+       and the respective National Meteorological Services, used per the
+       <a href="https://meteoalarm.org/page/terms-and-conditions" target="_blank" rel="noopener">terms and conditions of re-use</a>.
+       There may be delays between this page and meteoalarm.org; for the latest warnings please use
+       <a href="https://www.meteoalarm.org/">www.meteoalarm.org</a>.</p>
+    <p>weewx-meteoalarm_warnings, inspired by get-meteoalarm-warning-inc.php by
+       <a href="https://saratoga-weather.org/">Saratoga-Weather.org</a> and wrnWarningEU-CAP.php from
+       <a href="https://pwsdashboard.com/">pwsdashboard.com</a>.</p>
+  </footer>
+</main>
+</body>
+</html>

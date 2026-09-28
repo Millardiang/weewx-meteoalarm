@@ -1,0 +1,113 @@
+/* Meteoalarm skin for WeeWX */
+:root {
+  --ma-bg: #f6f7f9;
+  --ma-card: #ffffff;
+  --ma-text: #1d2330;
+  --ma-muted: #5d6675;
+  --ma-line: #d9dde3;
+  --ma-link: #0b5cad;
+  --ma-green: #29d660;
+  --ma-yellow: #ffdb23;
+  --ma-orange: #ff9500;
+  --ma-red: #ff0100;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ma-bg: #14171c;
+    --ma-card: #1e232b;
+    --ma-text: #e6e9ee;
+    --ma-muted: #a3acb9;
+    --ma-line: #343b46;
+    --ma-link: #7cb8ff;
+  }
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--ma-bg);
+  color: var(--ma-text);
+  font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+a { color: var(--ma-link); }
+.ma-page { max-width: 860px; margin: 0 auto; padding: 16px; }
+
+.ma-top { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; margin: 8px 0 20px; }
+.ma-top h1 { font-size: 1.6rem; margin: 0; flex: 1 1 auto; }
+.ma-top nav { display: flex; gap: 14px; font-size: .95rem; }
+.ma-meta { color: var(--ma-muted); font-size: .92rem; margin: -12px 0 20px; }
+
+.ma-box {
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin-bottom: 16px;
+  background: var(--ma-card);
+  border: 1px solid var(--ma-line);
+}
+.ma-clear { border-left: 8px solid var(--ma-green); }
+
+/* one alert */
+.ma-alert {
+  background: var(--ma-card);
+  border: 1px solid var(--ma-line);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 18px;
+  scroll-margin-top: 12px;
+}
+.ma-alert:target { box-shadow: 0 0 0 3px var(--ma-link); }
+.ma-alert-head {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 14px;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--level);
+  color: #111;
+}
+.ma-alert-head img { width: 64px; height: 64px; }
+.ma-alert-head h2 { margin: 0; font-size: 1.2rem; line-height: 1.25; }
+.ma-alert-head h2 small { font-weight: 600; opacity: .8; }
+.ma-alert-head p { margin: 2px 0 0; font-size: .92rem; }
+.ma-areas code { font-size: .85em; opacity: .75; }
+
+/* CSS-only language tabs: works without JavaScript */
+.ma-tabs { padding: 12px 16px 16px; }
+.ma-tabs > input { position: absolute; opacity: 0; pointer-events: none; }
+.ma-tabs > label {
+  display: inline-block;
+  padding: 4px 12px;
+  margin: 0 4px 8px 0;
+  border: 1px solid var(--ma-line);
+  border-radius: 999px;
+  font-size: .9rem;
+  cursor: pointer;
+  color: var(--ma-muted);
+}
+.ma-tabs > input:checked + label { background: var(--ma-text); border-color: var(--ma-text); color: var(--ma-card); }
+.ma-tabs > input:focus-visible + label { outline: 2px solid var(--ma-link); outline-offset: 2px; }
+.ma-panel { display: none; }
+.ma-tabs > input:nth-of-type(1):checked ~ .ma-panels > .ma-panel:nth-child(1),
+.ma-tabs > input:nth-of-type(2):checked ~ .ma-panels > .ma-panel:nth-child(2),
+.ma-tabs > input:nth-of-type(3):checked ~ .ma-panels > .ma-panel:nth-child(3),
+.ma-tabs > input:nth-of-type(4):checked ~ .ma-panels > .ma-panel:nth-child(4),
+.ma-tabs > input:nth-of-type(5):checked ~ .ma-panels > .ma-panel:nth-child(5),
+.ma-tabs > input:nth-of-type(6):checked ~ .ma-panels > .ma-panel:nth-child(6),
+.ma-tabs > input:nth-of-type(7):checked ~ .ma-panels > .ma-panel:nth-child(7),
+.ma-tabs > input:nth-of-type(8):checked ~ .ma-panels > .ma-panel:nth-child(8),
+.ma-tabs > input:nth-of-type(9):checked ~ .ma-panels > .ma-panel:nth-child(9),
+.ma-tabs > input:nth-of-type(10):checked ~ .ma-panels > .ma-panel:nth-child(10) { display: block; }
+.ma-panel h3 { font-size: 1.05rem; margin: 4px 0 8px; }
+.ma-panel p { margin: 0 0 10px; overflow-wrap: anywhere; }
+.ma-panel dl { display: grid; grid-template-columns: max-content 1fr; gap: 4px 14px; margin: 0 0 10px; }
+.ma-panel dt { color: var(--ma-muted); }
+.ma-panel dd { margin: 0; overflow-wrap: anywhere; }
+.ma-note { color: var(--ma-muted); font-size: .9rem; }
+
+.ma-footer { color: var(--ma-muted); font-size: .85rem; border-top: 1px solid var(--ma-line); margin-top: 28px; padding-top: 12px; }
+.ma-footer p { margin: 0 0 8px; }
+
+@media (max-width: 520px) {
+  .ma-alert-head { grid-template-columns: 44px 1fr; }
+  .ma-alert-head img { width: 44px; height: 44px; }
+}

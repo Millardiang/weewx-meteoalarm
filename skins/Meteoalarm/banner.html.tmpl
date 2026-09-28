@@ -1,0 +1,16 @@
+## Warning banner for your home page. Empty when no warning at min_level or above
+## is in force. The Seasons skin loads it (the installer can add that for you);
+## links are relative to this folder and are fixed up by the loader.
+#if $meteoalarm.has_alerts
+## margin-top -5px cancels the Seasons title bar's 5px bottom margin, so the panel sits right under it
+<div class="meteoalarm-banner" style="margin: -5px 0 0; padding: 8px 12px; border-radius: 0; background: $meteoalarm.max_color; color: #000;">
+  <strong>Weather warnings in force</strong>
+#for $a in $meteoalarm.alerts
+  <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin-top: 6px;">
+    <img src="icons/$a.icon" width="28" height="28" alt="" style="flex: none;">
+    <a href="index.html#$a.anchor" style="color: #000; font-weight: 600;">$a.level_name: $a.title</a>
+    <span>$a.onset_text &ndash; $a.expires_text</span>
+  </div>
+#end for
+</div>
+#end if
